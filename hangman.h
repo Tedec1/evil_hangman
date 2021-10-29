@@ -14,6 +14,9 @@
 */
 
 #include <string>
+#include <map>
+#include <vector>
+#include <unordered_map>
 
 using namespace std;
 
@@ -26,11 +29,17 @@ using namespace std;
 
 class hangman {
 public:
+    int LONGEST_WORD;
+    map<int,vector<string>> word_list;
+    int guesses_left;
+    vector<string> starting_group;
+//    unordered_map<string,vector<string>> groups;
+    string unguessed_word;
+    bool display_for_tests;
     hangman();
 
     // start a new game where player gets num_guesses unsuccessful tries
-	void start_new_game(int num_guesses);
-
+	void start_new_game(int num_guesses,int word_length, bool display_words);
     // player guesses letter c; return whether or not char is in word
     bool process_guess(char c);
 

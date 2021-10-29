@@ -10,21 +10,38 @@
     last modified: 3/7/2019
 */
 
+#include <fstream>
 #include "hangman.h"
 
 using namespace std;
 
 // constructor
-hangman::hangman() { 
-    // TODO: Read in and store words from dictionary.txt
+hangman::hangman() {
+    int l = 0;
+    ifstream fin;
+    fin.open("dictionary.txt");
+    while(!fin.eof()){
+        string s;
+        getline(fin,s);
+        if(s.length() > l) { l = s.length(); }
+        if(word_list.count(s.length())){
+            word_list[s.length()].push_back(s);
+        } else {
+            word_list[s.length()] = {s};
+        }
+    }
+    LONGEST_WORD = l;
 }
 
 
 // start_new_game()
 //
 // Setup a new game of hangman.
-void hangman::start_new_game(int num_guesses) {
-    // TODO: Initialize game state variables
+void hangman::start_new_game(int num_guesses,int word_length, bool display_words) {
+    unguessed_word = string(word_length,'-');
+    display_for_tests = display_words;
+    guesses_left = num_guesses;
+    starting_group = word_list[word_length];
 }
 
 

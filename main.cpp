@@ -14,6 +14,7 @@
 #include <string>
 #include <cstdlib>
 #include <cctype>
+#include <fstream>
 
 #include "hangman.h"
 
@@ -33,24 +34,31 @@ int main() {
     hangman game;
     
     // Keep playing the game until the user decides otherwise
-    while (true) {      
-        // TODO: prompt user for length of word, reprompting if invalid word length
+    while (true) {
+        int word_length;
+        while(true){
+            word_length = get_integer("How long of a word do you want?");
+            if(word_length <= 0 || word_length > game.LONGEST_WORD){
+                cout << "input out of bounds, please try again" << endl;
+                continue;
+            }
+            break;
+        }
+        cout << endl;
 
         int num_guesses = get_integer("How many guesses would you like?");
         cout << endl;
 
-        // TODO: prompt user to decide whether or not they want to see how many words
-        // remain possible for the current display word and previous guesses
+        bool display_words = get_yesno("do you want to see how many words remaining?");
+        cout << endl;
 
-        // TODO: rewrite the line below to start a new game with the additional info
-        // prompted for above
-        game.start_new_game(num_guesses);
+        game.start_new_game(num_guesses,word_length,display_words);
 
         while (!game.is_won() && !game.is_lost()) {
             cout << "Your word is: " << game.get_display_word() << endl;
 
             string already_guessed = game.get_guessed_chars();
-            if (already_guessed.size() == 0) {
+            if (already_guessed.empty()) {
                 cout << "You have not yet guessed any letters." << endl;
             } else {
                 cout << "You have already guessed these letters: ";
