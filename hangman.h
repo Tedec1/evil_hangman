@@ -29,20 +29,21 @@ using namespace std;
 
 class hangman {
 public:
-    int LONGEST_WORD;
-    map<int,vector<string>> word_list;
+    int LONGEST_WORD; // the longest word in the dictionary file
+    map<int,vector<string>> word_list; //list of all words by length
     int guesses_left;
-    vector<string> starting_group;
-//    unordered_map<string,vector<string>> groups;
-    string unguessed_word;
+    vector<string> group; //current group of possible words
+    string unguessed_word; //
     bool display_for_tests;
-    hangman();
+    bool chars_guessed[26];
 
+    hangman();
+    //helper function to get a key for each group when sorting words
+    string get_hidden_word_key(string word_to_hide, char guess, string current_hidden_word);
     // start a new game where player gets num_guesses unsuccessful tries
 	void start_new_game(int num_guesses,int word_length, bool display_words);
     // player guesses letter c; return whether or not char is in word
     bool process_guess(char c);
-
     // display current state of word - guessed characters or '-'
     string get_display_word();
 

@@ -41,7 +41,7 @@ void hangman::start_new_game(int num_guesses,int word_length, bool display_words
     unguessed_word = string(word_length,'-');
     display_for_tests = display_words;
     guesses_left = num_guesses;
-    starting_group = word_list[word_length];
+    group = word_list[word_length];
 }
 
 
@@ -51,16 +51,39 @@ void hangman::start_new_game(int num_guesses,int word_length, bool display_words
 // or not the guess was in the hidden word.  If the guess is incorrect, the
 // remaining guess count is decreased.
 bool hangman::process_guess(char c) {
-    return false;
+    //sort group into different guess groups
+    unordered_map<string,vector<string>> groups;
+    for (string s:group) {
+        string key = get_hidden_word_key(s,c,unguessed_word);
+        if(groups.count(key)){
+            groups[key].push_back(s);
+        } else {
+            groups[key] = {s};
+        }
+    }
+    //find the largest group
+
+    //switch the unguessed word with the key
+
+    //switch group with the largest group
+
 }
 
+string hangman::get_hidden_word_key(string word_to_hide, char guess, string current_hidden_word){
+    for (int i = 0; i < word_to_hide.length(); i++) {
+        if(current_hidden_word[i] == '-' && word_to_hide[i] == guess) {
+            current_hidden_word[i] = guess;
+        }
+    }
+    return current_hidden_word;
+}
 
 // get_display_word()
 //
 // Return a representation of the hidden word, with unguessed letters
 // masked by '-' characters.
 string hangman::get_display_word() {
-    return "-a--ma-";
+    return unguessed_word;
 }
 
 
@@ -68,7 +91,7 @@ string hangman::get_display_word() {
 //
 // Return the number of guesses remaining for the player.
 int hangman::get_guesses_remaining() {
-    return 4;
+    return guesses_left;
 }
 
 
@@ -76,7 +99,13 @@ int hangman::get_guesses_remaining() {
 //
 // What letters has the player already guessed?  Return in alphabetic order.
 string hangman::get_guessed_chars() {
-    return "aemst";
+    string result;
+    for (int i = 0; i < 26; i++){
+        if(chars_guessed[i]){
+            result += char(97 + i);
+        }
+    }
+    return result;
 }
 
 
@@ -84,7 +113,7 @@ string hangman::get_guessed_chars() {
 //
 // Return true if letter was already guessed.
 bool hangman::was_char_guessed(char c) {
-    return false;
+    return chars_guessed[c - 97];
 }
 
 
@@ -108,7 +137,7 @@ bool hangman::is_lost() {
 //
 // Return the true hidden word to show the player.
 string hangman::get_hidden_word() {
-    return "hangman";
+    return group[0];
 }
 
 
