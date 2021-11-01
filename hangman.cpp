@@ -42,6 +42,9 @@ void hangman::start_new_game(int num_guesses,int word_length, bool display_words
     display_for_tests = display_words;
     guesses_left = num_guesses;
     group = word_list[word_length];
+    for (bool & i : chars_guessed) {
+        i = false;
+    }
 }
 
 
@@ -51,20 +54,37 @@ void hangman::start_new_game(int num_guesses,int word_length, bool display_words
 // or not the guess was in the hidden word.  If the guess is incorrect, the
 // remaining guess count is decreased.
 bool hangman::process_guess(char c) {
+    chars_guessed[c - 97] = true;
     //sort group into different guess groups
     unordered_map<string,vector<string>> groups;
+    vector<string> keys;
     for (string s:group) {
         string key = get_hidden_word_key(s,c,unguessed_word);
         if(groups.count(key)){
             groups[key].push_back(s);
         } else {
+            keys.push_back(key);
             groups[key] = {s};
         }
     }
     //find the largest group
+    string largest_key = keys[0];
 
+    for (string key: keys) {
+        if(groups[key].size() > groups[largest_key].size()){
+            largest_key = key;
+        }
+    }
     //switch the unguessed word with the key
+    group.swap(groups[largest_key]);
 
+    if(largest_key == unguessed_word){
+        guesses_left -= 1;
+        return false;
+    } else {
+        unguessed_word = largest_key;
+        return true;
+    }
     //switch group with the largest group
 
 }
@@ -121,7 +141,7 @@ bool hangman::was_char_guessed(char c) {
 //
 // Return true if the game has been won by the player.
 bool hangman::is_won() {
-    return false;
+    return unguessed_word == group[0];
 }
 
 
@@ -129,7 +149,7 @@ bool hangman::is_won() {
 //
 // Return true if the game has been lost.
 bool hangman::is_lost() {
-    return false;
+    return guesses_left == 0;
 }
 
 
@@ -137,7 +157,7 @@ bool hangman::is_lost() {
 //
 // Return the true hidden word to show the player.
 string hangman::get_hidden_word() {
-    return group[0];
+    return group[rand() % (group.size() - 1)];
 }
 
 

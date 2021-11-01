@@ -38,7 +38,7 @@ int main() {
         int word_length;
         while(true){
             word_length = get_integer("How long of a word do you want?");
-            if(word_length <= 0 || word_length > game.LONGEST_WORD){
+            if(word_length <= 1 || word_length > game.LONGEST_WORD){
                 cout << "input out of bounds, please try again" << endl;
                 continue;
             }

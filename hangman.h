@@ -33,7 +33,7 @@ public:
     map<int,vector<string>> word_list; //list of all words by length
     int guesses_left;
     vector<string> group; //current group of possible words
-    string unguessed_word; //
+    string unguessed_word;
     bool display_for_tests;
     bool chars_guessed[26];
 
