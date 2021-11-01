@@ -57,6 +57,7 @@ int main() {
         while (!game.is_won() && !game.is_lost()) {
             cout << "Your word is: " << game.get_display_word() << endl;
 
+
             string already_guessed = game.get_guessed_chars();
             if (already_guessed.empty()) {
                 cout << "You have not yet guessed any letters." << endl;
@@ -76,6 +77,11 @@ int main() {
             cout << endl;
 
             bool good_guess = game.process_guess(guess);
+
+            if(game.display_for_tests){
+                cout << "\nwords left: " << game.group.size() << '\n';
+            }
+
             if (good_guess) {
                 cout << "Good guess!" << endl;
             } else {
@@ -84,6 +90,7 @@ int main() {
 
             if (game.is_won()) {
                 cout << "Congratulations! You won the game!" << endl;
+                cout << "the word was: " + game.get_hidden_word() + '\n';
             }
 
             if (game.is_lost()) {
