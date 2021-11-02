@@ -78,6 +78,7 @@ bool hangman::process_guess(char c) {
     //switch the unguessed word with the key
     group.swap(groups[largest_key]);
 
+    //switch group with the largest group
     if(largest_key == unguessed_word){
         guesses_left -= 1;
         return false;
@@ -85,7 +86,6 @@ bool hangman::process_guess(char c) {
         unguessed_word = largest_key;
         return true;
     }
-    //switch group with the largest group
 
 }
 
@@ -99,7 +99,6 @@ string hangman::get_hidden_word_key(string word_to_hide, char guess, string curr
 }
 
 // get_display_word()
-//
 // Return a representation of the hidden word, with unguessed letters
 // masked by '-' characters.
 string hangman::get_display_word() {
@@ -157,7 +156,7 @@ bool hangman::is_lost() {
 //
 // Return the true hidden word to show the player.
 string hangman::get_hidden_word() {
-    return group[rand() % (group.size() - 1)];
+    return group[0];
 }
 
 
