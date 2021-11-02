@@ -158,5 +158,3 @@ bool hangman::is_lost() {
 string hangman::get_hidden_word() {
     return group[0];
 }
-
-
